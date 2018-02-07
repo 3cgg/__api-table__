@@ -1,0 +1,42 @@
+{
+
+  "source":{
+    "useDefault":true,
+    "default":{
+      "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
+      "sheet":":字典类型"
+    },
+    "custom":{
+      "sourceClass":"",
+      "data":{
+        "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
+        "sheet":":字典类型"
+      }
+    }
+  },
+
+  "consume":[
+    {
+      "name":"Mapping",
+      "class":"",
+      "mapping":{
+        "id":"id",
+        "_code":"_code",
+        "_name":"_name",
+        "_desc":"_desc"
+      }
+    },
+    {
+      "name":"Replace Placeholder",
+      "class":"",
+      "dmlInsert":"INSERT INTO `t_param_type`(id,_code,_name,_desc,deleted,version,create_id,create_time,update_id,update_time) VALUES ('${id}','${_code}','${_name}','${_desc}','${deleted}',${version},'${create_id}','${create_time}','${update_id}','${update_time}');"
+    }
+  ],
+
+  "out":{
+    "ddl":"",
+    "ddlFile":"D:\\api-table\\dic-table\\t_param_type.sql",
+    "file":"D:\\api-table\\dic-table\\t_param_type_structure_data.sql"
+  }
+
+}
