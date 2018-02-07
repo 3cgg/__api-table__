@@ -1,18 +1,10 @@
 {
 
   "source":{
-    "useDefault":true,
-    "default":{
-      "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
-      "sheet":":字典类型"
-    },
-    "custom":{
-      "sourceClass":"",
-      "data":{
-        "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
-        "sheet":":字典类型"
-      }
-    }
+    "name":"Type Source",
+    "class":"",
+    "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
+    "sheet":"字典类型"
   },
 
   "consume":[
