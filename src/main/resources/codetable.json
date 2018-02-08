@@ -2,7 +2,7 @@
 
   "source":{
     "name":"Type Source",
-    "class":"",
+    "factory":"",
     "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
     "sheet":"字典明细"
   },
@@ -10,7 +10,7 @@
   "consume":[
     {
       "name":"Mapping",
-      "class":"",
+      "factory":"",
       "mapping":{
         "id":"id",
         "_code":"_code",
@@ -21,7 +21,7 @@
     },
     {
       "name":"Replace Placeholder",
-      "class":"",
+      "factory":"",
       "dmlInsert":"INSERT INTO `t_param_code`(id,_code,_type,_name,_desc,deleted,version,create_id,create_time,update_id,update_time) VALUES ('${id}','${_code}','${_type}','${_name}','${_desc}','${deleted}',${version},'${create_id}','${create_time}','${update_id}','${update_time}');"
     }
   ],
