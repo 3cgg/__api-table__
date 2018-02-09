@@ -28,3 +28,4 @@ object SimpleExcelSourcerFactory extends SourcerFactory{
   }
 
 }
+class SimpleExcelSourcerFactory{}

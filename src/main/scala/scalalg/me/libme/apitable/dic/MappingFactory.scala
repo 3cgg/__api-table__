@@ -36,6 +36,7 @@ object MappingFactory extends ConsumerFactory{
 
 
 }
+class MappingFactory{}
 
 class MappingConsumer(conf:Map[String,AnyRef],consumerMeta: ConsumerMeta) extends ExcelCompositer(consumerMeta){
 
