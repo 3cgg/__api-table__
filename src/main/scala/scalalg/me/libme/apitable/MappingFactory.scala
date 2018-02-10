@@ -1,11 +1,12 @@
-package scalalg.me.libme.apitable.dic
+package scalalg.me.libme.apitable
 
 import me.libme.kernel._c.util.CliParams
 import me.libme.xstream.EntryTupe.Entry
-import me.libme.xstream.{Consumer, ConsumerMeta, Tupe}
 import me.libme.xstream.excel.ExcelCompositer
+import me.libme.xstream.{Consumer, ConsumerMeta, Tupe}
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConversions._
+import scala.collection.{JavaConversions, mutable}
 
 /**
   * Created by J on 2018/2/8.
@@ -14,7 +15,7 @@ object MappingFactory extends ConsumerFactory{
 
 
 
-  override def factory(conf: Map[String, Object]): Consumer = {
+  override def factory(conf: mutable.Map[String, Object]): Consumer = {
 
 
     val cliParams:CliParams=new CliParams(JavaConversions.mapAsJavaMap(conf))
@@ -38,10 +39,9 @@ object MappingFactory extends ConsumerFactory{
 }
 class MappingFactory{}
 
-class MappingConsumer(conf:Map[String,AnyRef],consumerMeta: ConsumerMeta) extends ExcelCompositer(consumerMeta){
+class MappingConsumer(conf:mutable.Map[String,AnyRef],consumerMeta: ConsumerMeta) extends ExcelCompositer(consumerMeta){
 
-
-  val mappings:Map[String,String]=classOf[Map[String,String]].cast(conf.get("mapping"))
+  val mappings:mutable.Map[String,String]=classOf[java.util.Map[String,String]].cast(conf.get("mapping").get)
 
   override def doPrepare(tupe: Tupe[_]): Unit = {
 

@@ -2,9 +2,10 @@ package scalalg.me.libme.apitable
 
 import java.io
 import java.io.BufferedWriter
+import java.util.Date
 
 import me.libme.kernel._c.pubsub._
-import me.libme.kernel._c.util.{CliParams, JStringUtils}
+import me.libme.kernel._c.util.{CliParams, JDateUtils, JStringUtils}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions
@@ -13,15 +14,15 @@ import scala.io.Source
 /**
   * Created by J on 2018/2/9.
   */
-class Output(conf:Map[String,AnyRef]) {
+class Output(conf:collection.mutable.Map[String,AnyRef]) {
 
   val LOGGER:Logger=LoggerFactory.getLogger(classOf[Output])
 
 
-  val topic:String=classOf[String].cast(conf.get("topic"))
+  val topic:String=classOf[String].cast(conf.get("topic").get)
   val subscriber:Subscriber=new Subscriber(new Topic(topic),QueuePools.defaultPool())
   val consumer:Consume=subscriber.consume()
-  val filePath=classOf[String].cast(conf.get("file"))
+  val filePath=classOf[String].cast(conf.get("file").get)
 
   def appendChar(c:String):Unit={
 
@@ -75,7 +76,10 @@ class Output(conf:Map[String,AnyRef]) {
         }
       }
 
-      accept(if(isConsume) System.currentTimeMillis() else latestTime)
+      accept(if(isConsume) System.currentTimeMillis() else {
+        LOGGER.info(Thread.currentThread().getName+" had not consume data from : "+JDateUtils.formatWithMSeconds(new Date(latestTime)))
+        latestTime
+      })
 
     }
 
@@ -85,6 +89,7 @@ class Output(conf:Map[String,AnyRef]) {
       appendChar(stringBuffer.toString)
     }
 
+    LOGGER.info(Thread.currentThread().getName+" ready to exit");
 
   }
 

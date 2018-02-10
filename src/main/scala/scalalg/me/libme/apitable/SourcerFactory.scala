@@ -1,6 +1,8 @@
-package scalalg.me.libme.apitable.dic
+package scalalg.me.libme.apitable
 
 import me.libme.xstream.Sourcer
+
+import scala.collection.mutable
 
 /**
   * Created by J on 2018/2/8.
@@ -8,6 +10,6 @@ import me.libme.xstream.Sourcer
 trait SourcerFactory {
 
   @throws(classOf[Exception])
-  def factory(conf: Map[String,Object]):Sourcer;
+  def factory(conf: mutable.Map[String,Object]):Sourcer;
 
 }

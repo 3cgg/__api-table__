@@ -1,28 +1,39 @@
 package scalalg.me.libme.apitable
 
-import java.util.concurrent.{ExecutorService, Executors, ThreadFactory}
+import java.util.Optional
+import java.util.concurrent.{Executors, ThreadFactory}
 
+import me.libme.kernel._c.file.FileTransferCfg
 import me.libme.kernel._c.json.JJSON
 import me.libme.kernel._c.util.CliParams
-import me.libme.xstream.{Consumer, SimpleTopology}
+import me.libme.xstream._
+import me.libme.xstream.excel.{ExcelCompositer, SimpleExcelSource}
 
 import scala.collection.JavaConversions
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
-import scalalg.me.libme.apitable.dic.{DMLFactory, MappingFactory, SimpleExcelSourcerFactory}
 
 /**
   * Created by J on 2018/2/9.
   */
 object ConfigProcess {
 
-  val conifgFile="--config.files"
+  val conifgFile_k="--config.files"
+  val logRepo_k="--log.repo"
 
   def main(args: Array[String]): Unit = {
 
+    import scala.collection.JavaConversions._
+
     val cliParams:CliParams=new CliParams(args)
 
-    val files=cliParams.getString(conifgFile," ")
+    val files=cliParams.getString(conifgFile_k," ")
+
+    val logRepo=Optional.of(cliParams.getString(logRepo_k)).orElse("d:/test-xml-streaming")
+    val fileTransferCfg = new FileTransferCfg
+    fileTransferCfg.setDskPath(logRepo)
+    val repository = new FileRepository(fileTransferCfg)
+
 
     for(file <- files){
 
@@ -30,15 +41,18 @@ object ConfigProcess {
       val conf=JavaConversions.mapAsScalaMap(JJSON.get().parse(content))
 
       // source
-      val sourceConfig=classOf[Map[String,Object]].cast(conf.get("source"))
+
+      val sourceConfig:scala.collection.mutable.Map[String,Object]=classOf[java.util.Map[String,Object]].cast(conf.get("source").get)
       val sourceCliParam=new CliParams(JavaConversions.mapAsJavaMap(sourceConfig))
       val factory=sourceCliParam.getString("factory")
-      var source=_
+      var source:Sourcer=null
       if(factory.equals(classOf[SimpleExcelSourcerFactory].getName)){
-        source=SimpleExcelSourcerFactory.factory(sourceConfig)
+        val _source:SimpleExcelSource=classOf[SimpleExcelSource].cast(SimpleExcelSourcerFactory.factory(sourceConfig))
+        _source.setRepository(repository)
+        source=_source
       }
 
-      val consumeConfgs=classOf[List[Map[String,Object]]].cast(conf.get("consume"))
+      val consumeConfgs=classOf[java.util.List[java.util.Map[String,Object]]].cast(conf.get("consume").get)
       val consumers=new ArrayBuffer[Consumer](consumeConfgs.length)
 
       //consume
@@ -46,10 +60,12 @@ object ConfigProcess {
         val consumerCliParam=new CliParams(JavaConversions.mapAsJavaMap(consumeConfg))
         val factory=consumerCliParam.getString("factory")
         if(factory.equals(classOf[MappingFactory].getName)){
-          val consume=MappingFactory.factory(consumeConfg)
+          val consume:ExcelCompositer=classOf[ExcelCompositer].cast(MappingFactory.factory(consumeConfg))
+          consume.setRepository(repository)
           consumers.append(consume)
         }else if(factory.equals(classOf[DMLFactory].getName)){
-          val consume=DMLFactory.factory(consumeConfg)
+          val consume:ExcelCompositer=classOf[ExcelCompositer].cast(DMLFactory.factory(consumeConfg))
+          consume.setRepository(repository)
           consumers.append(consume)
         }
       }
@@ -60,17 +76,22 @@ object ConfigProcess {
           new Thread(r,file)
         }
       }))
+
+
+
       simpleTopology.setSourcer(source)
       consumers.foreach(c=>simpleTopology.addConsumer(c))
       simpleTopology.start()
 
-      new Thread()
-
-      //out
-      val output=new Output(classOf[Map[String,Object]].cast(conf.get("out")))
-      output.output()
-
-
+      val thread=new Thread(new Runnable {
+        override def run(): Unit = {
+          //out
+          val output=new Output(classOf[java.util.Map[String,Object]].cast(conf.get("out").get))
+          output.output()
+        }
+      },"out:"+file)
+      thread.setDaemon(true)
+      thread.start()
 
     }
 

@@ -1,17 +1,17 @@
-package scalalg.me.libme.apitable.dic
+package scalalg.me.libme.apitable
 
 import me.libme.kernel._c.util.CliParams
 import me.libme.xstream.excel.SimpleExcelSource
 import me.libme.xstream.{SourceMeta, Sourcer}
 
-import scala.collection.JavaConversions
+import scala.collection.{JavaConversions, mutable}
 
 /**
   * Created by J on 2018/2/8.
   */
 object SimpleExcelSourcerFactory extends SourcerFactory{
 
-  override def factory(conf: Map[String, Object]): Sourcer = {
+  override def factory(conf: mutable.Map[String, Object]): Sourcer = {
 
     val cliParams:CliParams=new CliParams(JavaConversions.mapAsJavaMap(conf))
 

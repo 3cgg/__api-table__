@@ -1,4 +1,4 @@
-package scalalg.me.libme.apitable.dic
+package scalalg.me.libme.apitable
 
 import me.libme.kernel._c.pubsub.{Produce, Publisher, QueuePools, Topic}
 import me.libme.kernel._c.util.CliParams
@@ -6,7 +6,7 @@ import me.libme.xstream.EntryTupe.Entry
 import me.libme.xstream.excel.ExcelCompositer
 import me.libme.xstream.{Consumer, ConsumerMeta, Tupe}
 
-import scala.collection.JavaConversions
+import scala.collection.{JavaConversions, mutable}
 
 /**
   * Created by J on 2018/2/8.
@@ -15,7 +15,7 @@ object DMLFactory extends ConsumerFactory{
 
 
 
-  override def factory(conf: Map[String, Object]): Consumer = {
+  override def factory(conf: mutable.Map[String, Object]): Consumer = {
 
 
     val cliParams:CliParams=new CliParams(JavaConversions.mapAsJavaMap(conf))
@@ -35,11 +35,11 @@ object DMLFactory extends ConsumerFactory{
 
 class DMLFactory{}
 
-class DMLConsumer(conf:Map[String,AnyRef],consumerMeta: ConsumerMeta) extends ExcelCompositer(consumerMeta){
+class DMLConsumer(conf:mutable.Map[String,AnyRef],consumerMeta: ConsumerMeta) extends ExcelCompositer(consumerMeta){
 
 
-  val dmlInsert:String=classOf[String].cast(conf.get("dmlInsert"))
-  val topic:String=classOf[String].cast(conf.get("topic"))
+  val dmlInsert:String=classOf[String].cast(conf.get("dmlInsert").get)
+  val topic:String=classOf[String].cast(conf.get("topic").get)
   val publisher:Publisher=new Publisher(new Topic(topic),QueuePools.defaultPool())
   val producer:Produce=publisher.produce();
 
@@ -54,7 +54,7 @@ class DMLConsumer(conf:Map[String,AnyRef],consumerMeta: ConsumerMeta) extends Ex
     var tempDML=dmlInsert
     while(iterator.hasNext){
       val entry=classOf[Entry].cast(iterator.next())
-      tempDML=tempDML.replaceAll("[$]{[ ]*"+entry.getKey+"[ ]*}",String.valueOf(entry.getValue))
+      tempDML=tempDML.replaceAll("([$][{]\\s*"+entry.getKey+"\\s*[}])",String.valueOf(entry.getValue))
     }
 
     producer.produce(tempDML)

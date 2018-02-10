@@ -1,6 +1,8 @@
-package scalalg.me.libme.apitable.dic
+package scalalg.me.libme.apitable
 
 import me.libme.xstream.Consumer
+
+import scala.collection.mutable
 
 /**
   * Created by J on 2018/2/8.
@@ -8,6 +10,6 @@ import me.libme.xstream.Consumer
 trait ConsumerFactory {
 
   @throws(classOf[Exception])
-  def factory(conf: Map[String,Object]):Consumer
+  def factory(conf: mutable.Map[String,Object]):Consumer
 
 }
