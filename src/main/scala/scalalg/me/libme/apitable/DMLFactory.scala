@@ -1,7 +1,9 @@
 package scalalg.me.libme.apitable
 
+import java.util.Date
+
 import me.libme.kernel._c.pubsub.{Produce, Publisher, QueuePools, Topic}
-import me.libme.kernel._c.util.CliParams
+import me.libme.kernel._c.util.{CliParams, JDateUtils, JUniqueUtils}
 import me.libme.xstream.EntryTupe.Entry
 import me.libme.xstream.excel.ExcelCompositer
 import me.libme.xstream.{Consumer, ConsumerMeta, Tupe}
@@ -37,11 +39,17 @@ class DMLFactory{}
 
 class DMLConsumer(conf:mutable.Map[String,AnyRef],consumerMeta: ConsumerMeta) extends ExcelCompositer(consumerMeta){
 
+  import scala.collection.JavaConversions._
 
   val dmlInsert:String=classOf[String].cast(conf.get("dmlInsert").get)
+  val overrideValues:mutable.Map[String,AnyRef]=classOf[java.util.Map[String,Object]].cast(conf.get("override").get)
   val topic:String=classOf[String].cast(conf.get("topic").get)
   val publisher:Publisher=new Publisher(new Topic(topic),QueuePools.defaultPool())
   val producer:Produce=publisher.produce();
+
+  def uuid():String={JUniqueUtils.unique()}
+
+  def sysdate():String={JDateUtils.formatWithSeconds(new Date())}
 
   override def doPrepare(tupe: Tupe[_]): Unit = {
 
@@ -54,8 +62,23 @@ class DMLConsumer(conf:mutable.Map[String,AnyRef],consumerMeta: ConsumerMeta) ex
     var tempDML=dmlInsert
     while(iterator.hasNext){
       val entry=classOf[Entry].cast(iterator.next())
-      tempDML=tempDML.replaceAll("([$][{]\\s*"+entry.getKey+"\\s*[}])",String.valueOf(entry.getValue))
+      val value:String=String.valueOf(entry.getValue)
+      if(!overrideValues.contains(entry.getKey)){
+        tempDML=tempDML.replaceAll("([$][{]\\s*"+entry.getKey+"\\s*[}])",value)
+      }
+
     }
+
+    overrideValues.foreach{case (key:String,ovalue:AnyRef)=>{
+      var value:String=null
+      value=ovalue match {
+        case "uuid()"=> uuid()
+        case "sysdate()"=>sysdate()
+        case _=>String.valueOf(ovalue)
+      }
+      tempDML=tempDML.replaceAll("([$][{]\\s*"+key+"\\s*[}])",value)
+    }}
+
 
     producer.produce(tempDML)
 

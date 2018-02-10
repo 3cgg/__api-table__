@@ -3,6 +3,7 @@ package scalalg.me.libme.apitable
 import java.io
 import java.io.BufferedWriter
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 import me.libme.kernel._c.pubsub._
 import me.libme.kernel._c.util.{CliParams, JDateUtils, JStringUtils}
@@ -61,7 +62,8 @@ class Output(conf:collection.mutable.Map[String,AnyRef]) {
 
 
     def accept(latestTime:Long):Boolean={
-      if(System.currentTimeMillis()-latestTime>1000*30){ //30s
+      val elapse=System.currentTimeMillis()-latestTime
+      if(elapse>1000*30){ //30s
         return false
       }
       var isConsume=false
@@ -77,7 +79,8 @@ class Output(conf:collection.mutable.Map[String,AnyRef]) {
       }
 
       accept(if(isConsume) System.currentTimeMillis() else {
-        LOGGER.info(Thread.currentThread().getName+" had not consume data from : "+JDateUtils.formatWithMSeconds(new Date(latestTime)))
+        LOGGER.info(Thread.currentThread().getName+" had not consume data since : "+JDateUtils.formatWithMSeconds(new Date(latestTime)))
+        TimeUnit.SECONDS.sleep(3)
         latestTime
       })
 

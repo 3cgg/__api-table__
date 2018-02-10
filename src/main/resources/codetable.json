@@ -23,7 +23,16 @@
       "name":"Replace Placeholder",
       "factory":"scalalg.me.libme.apitable.DMLFactory",
       "topic":"t_param_code",
-      "dmlInsert":"INSERT INTO `t_param_code`(id,_code,_type,_name,_desc,deleted,version,create_id,create_time,update_id,update_time) VALUES ('${id}','${_code}','${_type}','${_name}','${_desc}','${deleted}',${version},'${create_id}','${create_time}','${update_id}','${update_time}');"
+      "dmlInsert":"INSERT INTO `t_param_code`(id,_code,_type,_name,_desc,deleted,version,create_id,create_time,update_id,update_time) VALUES ('${id}','${_code}','${_type}','${_name}','${_desc}','${deleted}',${version},'${create_id}','${create_time}','${update_id}','${update_time}');\n",
+      "override":{
+        "id":"uuid()",
+        "deleted":"N",
+        "version":0,
+        "create_id":"SYS",
+        "create_time":"sysdate()",
+        "update_id":"SYS",
+        "update_time":"sysdate()"
+      }
     }
   ],
 
