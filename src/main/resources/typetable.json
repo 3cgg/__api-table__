@@ -2,7 +2,7 @@
 
   "source":{
     "name":"Type Source",
-    "class":"",
+    "factory":"scalalg.me.libme.apitable.SimpleExcelSourcerFactory",
     "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
     "sheet":"字典类型"
   },
@@ -10,22 +10,32 @@
   "consume":[
     {
       "name":"Mapping",
-      "class":"",
+      "factory":"scalalg.me.libme.apitable.MappingFactory",
       "mapping":{
-        "id":"id",
-        "_code":"_code",
-        "_name":"_name",
-        "_desc":"_desc"
+        "类型":"_code",
+        "名称":"_name",
+        "描述":"_desc"
       }
     },
     {
       "name":"Replace Placeholder",
-      "class":"",
-      "dmlInsert":"INSERT INTO `t_param_type`(id,_code,_name,_desc,deleted,version,create_id,create_time,update_id,update_time) VALUES ('${id}','${_code}','${_name}','${_desc}','${deleted}',${version},'${create_id}','${create_time}','${update_id}','${update_time}');"
+      "factory":"scalalg.me.libme.apitable.DMLFactory",
+      "topic":"t_param_type",
+      "dmlInsert":"INSERT INTO `t_param_type`(id,_code,_name,_desc,deleted,version,create_id,create_time,update_id,update_time) VALUES ('${id}','${_code}','${_name}','${_desc}','${deleted}',${version},'${create_id}','${create_time}','${update_id}','${update_time}');\n",
+      "override":{
+        "id":"uuid()",
+        "deleted":"N",
+        "version":0,
+        "create_id":"SYS",
+        "create_time":"sysdate()",
+        "update_id":"SYS",
+        "update_time":"sysdate()"
+      }
     }
   ],
 
   "out":{
+    "topic":"t_param_type",
     "ddl":"",
     "ddlFile":"D:\\api-table\\dic-table\\t_param_type.sql",
     "file":"D:\\api-table\\dic-table\\t_param_type_structure_data.sql"

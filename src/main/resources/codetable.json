@@ -1,7 +1,7 @@
 {
 
   "source":{
-    "name":"Type Source",
+    "name":"Code Source",
     "factory":"scalalg.me.libme.apitable.SimpleExcelSourcerFactory",
     "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
     "sheet":"字典明细"
@@ -12,7 +12,6 @@
       "name":"Mapping",
       "factory":"scalalg.me.libme.apitable.MappingFactory",
       "mapping":{
-        "id":"id",
         "编码":"_code",
         "类型":"_type",
         "名称":"_name",
