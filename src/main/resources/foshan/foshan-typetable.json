@@ -24,7 +24,7 @@
       "dmlInsert":"INSERT INTO `t_param_type`(uid,code,name,description,is_deleted,version,created_by,created_date,last_modified_by,last_modified_date,instance_code,space_code,tenant_code) VALUES ('${uid}','${code}','${name}','${description}','${is_deleted}',${version},'${created_by}','${created_date}','${last_modified_by}','${last_modified_date}','${instance_code}','${space_code}','${tenant_code}');\n",
       "override":{
         "uid":"uuid()",
-        "is_deleted":"N",
+        "is_deleted":"0",
         "version":0,
         "created_by":"SYS",
         "created_date":"sysdate()",
