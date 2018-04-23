@@ -15,7 +15,7 @@ import scala.io.Source
 /**
   * Created by J on 2018/2/9.
   */
-class Output(conf:collection.mutable.Map[String,AnyRef]) {
+class Output(conf:collection.mutable.Map[String,AnyRef],taskCount: TaskCount) {
 
   val LOGGER:Logger=LoggerFactory.getLogger(classOf[Output])
 
@@ -93,7 +93,7 @@ class Output(conf:collection.mutable.Map[String,AnyRef]) {
     }
 
     LOGGER.info(Thread.currentThread().getName+" ready to exit");
-
+    taskCount.reduce();
   }
 
 

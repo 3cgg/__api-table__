@@ -21,6 +21,8 @@ object ConfigProcess {
   val conifgFile_k="--config.files"
   val logRepo_k="--log.repo"
 
+  val taskCount=new TaskCount(0);
+
   def main(args: Array[String]): Unit = {
 
     import scala.collection.JavaConversions._
@@ -33,7 +35,6 @@ object ConfigProcess {
     val fileTransferCfg = new FileTransferCfg
     fileTransferCfg.setDskPath(logRepo)
     val repository = new FileRepository(fileTransferCfg)
-
 
     for(file <- files){
 
@@ -86,13 +87,14 @@ object ConfigProcess {
       val thread=new Thread(new Runnable {
         override def run(): Unit = {
           //out
-          val output=new Output(classOf[java.util.Map[String,Object]].cast(conf.get("out").get))
+          val output=new Output(classOf[java.util.Map[String,Object]].cast(conf.get("out").get),taskCount)
           output.output()
         }
       },"out:"+file)
       thread.setDaemon(true)
       thread.start()
 
+      taskCount.plus();
     }
 
 
