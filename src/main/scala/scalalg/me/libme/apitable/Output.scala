@@ -1,16 +1,16 @@
 package scalalg.me.libme.apitable
 
 import java.io
-import java.io.BufferedWriter
+import java.io.{BufferedWriter, File}
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
 import me.libme.kernel._c.pubsub._
-import me.libme.kernel._c.util.{CliParams, JDateUtils, JStringUtils}
+import me.libme.kernel._c.util.{CliParams, JDateUtils, JStringUtils, JUniqueUtils}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions
-import scala.io.Source
+import scala.io.{Codec, Source}
 
 /**
   * Created by J on 2018/2/9.
@@ -24,6 +24,18 @@ class Output(conf:collection.mutable.Map[String,AnyRef],taskCount: TaskCount) {
   val subscriber:Subscriber=new Subscriber(new Topic(topic),QueuePools.defaultPool())
   val consumer:Consume=subscriber.consume()
   val filePath=classOf[String].cast(conf.get("file").get)
+
+
+  def backup():Unit={
+
+    val file=new File(filePath)
+    if(file.exists()){
+      val newName=file.getAbsolutePath+"."+JUniqueUtils.sequence()
+      file.renameTo(new File(newName))
+    }
+
+  }
+
 
   def appendChar(c:String):Unit={
 
@@ -45,6 +57,7 @@ class Output(conf:collection.mutable.Map[String,AnyRef],taskCount: TaskCount) {
 
   def output():Unit={
 
+    backup
 
     val cliParam:CliParams=new CliParams(JavaConversions.mapAsJavaMap(conf))
     val ddl=cliParam.getString("ddl")
