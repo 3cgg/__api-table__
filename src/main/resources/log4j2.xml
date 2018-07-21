@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" strict="true" name="log4j2" packages="me.libme">
+    <Properties>
+
+    </Properties>
+    <Appenders>
+        <Appender type="Console" name="appConsole">
+            <Layout type="PatternLayout" pattern="%d %p  %c [%t] %m %n"/>
+        </Appender>
+
+
+    </Appenders>
+
+    <Loggers>
+        <Logger name="test" level="debug" additivity="false">
+            <AppenderRef ref="appConsole"/>
+        </Logger>
+        <Logger name="me.libme" level="debug" additivity="false">
+            <AppenderRef ref="appConsole"/>
+        </Logger>
+        <Logger name="org" level="debug" additivity="false">
+            <AppenderRef ref="appConsole"/>
+        </Logger>
+        <Logger name="scalalg" level="debug" additivity="false">
+            <AppenderRef ref="appConsole"/>
+        </Logger>
+
+        <!-- 根logger的设置-->
+        <root>
+            <level value ="debug"/>
+            <appender-ref ref="appConsole"/>
+        </root>
+
+    </Loggers>
+
+</Configuration>

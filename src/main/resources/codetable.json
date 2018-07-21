@@ -1,0 +1,45 @@
+{
+
+  "source":{
+    "name":"Code Source",
+    "factory":"scalalg.me.libme.apitable.SimpleExcelSourcerFactory",
+    "file":"D:\\api-table\\dic-table\\字典表模板.xlsx",
+    "sheet":"字典明细"
+  },
+
+  "consume":[
+    {
+      "name":"Mapping",
+      "factory":"scalalg.me.libme.apitable.MappingFactory",
+      "mapping":{
+        "编码":"_code",
+        "类型":"_type",
+        "名称":"_name",
+        "描述":"_desc"
+      }
+    },
+    {
+      "name":"Replace Placeholder",
+      "factory":"scalalg.me.libme.apitable.DMLFactory",
+      "topic":"t_param_code",
+      "dmlInsert":"INSERT INTO `t_param_code`(id,_code,_type,_name,_desc,deleted,version,create_id,create_time,update_id,update_time) VALUES ('${id}','${_code}','${_type}','${_name}','${_desc}','${deleted}',${version},'${create_id}','${create_time}','${update_id}','${update_time}');\n",
+      "override":{
+        "id":"uuid()",
+        "deleted":"N",
+        "version":0,
+        "create_id":"SYS",
+        "create_time":"sysdate()",
+        "update_id":"SYS",
+        "update_time":"sysdate()"
+      }
+    }
+  ],
+
+  "out":{
+    "topic":"t_param_code",
+    "ddl":"",
+    "ddlFile":"D:\\api-table\\dic-table\\t_param_code.sql",
+    "file":"D:\\api-table\\dic-table\\t_param_code_structure_data.sql"
+  }
+  
+}

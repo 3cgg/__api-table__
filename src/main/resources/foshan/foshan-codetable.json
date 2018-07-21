@@ -1,0 +1,49 @@
+{
+
+  "source":{
+    "name":"Code Source",
+    "factory":"scalalg.me.libme.apitable.SimpleExcelSourcerFactory",
+    "file":"D:\\java_\\foshan\\FS_Documents\\3.设计\\字典表集.xlsx",
+    "sheet":"字典明细"
+  },
+
+  "consume":[
+    {
+      "name":"Mapping",
+      "factory":"scalalg.me.libme.apitable.MappingFactory",
+      "mapping":{
+        "编码":"code",
+        "类型":"type",
+        "名称":"name",
+        "描述":"description",
+        "顺序":"sequence"
+      }
+    },
+    {
+      "name":"Replace Placeholder",
+      "factory":"scalalg.me.libme.apitable.DMLFactory",
+      "topic":"t_param_code",
+      "dmlInsert":"INSERT INTO `t_param_code`(sequence,uid,code,type,name,description,is_deleted,version,created_by,created_date,last_modified_by,last_modified_date,instance_code,space_code,tenant_code) VALUES ('${sequence}','${uid}','${code}','${type}','${name}','${description}','${is_deleted}',${version},'${created_by}','${created_date}','${last_modified_by}','${last_modified_date}','${instance_code}','${space_code}','${tenant_code}');\n",
+      "override":{
+        "uid":"uuid()",
+        "is_deleted":"0",
+        "version":0,
+        "created_by":"SYS",
+        "created_date":"sysdate()",
+        "last_modified_by":"SYS",
+        "last_modified_date":"sysdate()",
+        "instance_code":"foshan",
+        "space_code":"foshan",
+        "tenant_code":"foshan"
+      }
+    }
+  ],
+
+  "out":{
+    "topic":"t_param_code",
+    "ddl":"",
+    "ddlFile":"D:\\java_\\foshan\\foshan-app\\foshan-app\\t_param_code.sql",
+    "file":"D:\\java_\\foshan\\foshan-app\\foshan-app\\t_param_code_structure_data.sql"
+  }
+  
+}

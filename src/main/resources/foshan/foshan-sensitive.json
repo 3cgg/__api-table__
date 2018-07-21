@@ -1,0 +1,48 @@
+{
+
+  "source":{
+    "name":"Code Source",
+    "factory":"scalalg.me.libme.apitable.SimpleExcelSourcerFactory",
+    "file":"D:\\java_\\foshan\\FS_Documents\\3.设计\\敏感词.xlsx",
+    "sheet":"敏感词"
+  },
+
+  "consume":[
+    {
+      "name":"Mapping",
+      "factory":"scalalg.me.libme.apitable.MappingFactory",
+      "mapping":{
+        "敏感词":"content"
+      }
+    },
+    {
+      "name":"Replace Placeholder",
+      "factory":"scalalg.me.libme.apitable.DMLFactory",
+      "topic":"t_sensitive_word",
+      "dmlInsert":"INSERT INTO `t_sensitive_word`(uid,code,template_content,level,enable,is_deleted,version,created_by,created_date,last_modified_by,last_modified_date,instance_code,space_code,tenant_code) VALUES ('${uid}','${code}','${content}','${level}','${enable}','${is_deleted}',${version},'${created_by}','${created_date}','${last_modified_by}','${last_modified_date}','${instance_code}','${space_code}','${tenant_code}');\n",
+      "override":{
+        "uid":"uuid()",
+        "code":"SW001",
+        "level":"1",
+        "enable":"1",
+        "is_deleted":"0",
+        "version":0,
+        "created_by":"SYS",
+        "created_date":"sysdate()",
+        "last_modified_by":"SYS",
+        "last_modified_date":"sysdate()",
+        "instance_code":"foshan",
+        "space_code":"foshan",
+        "tenant_code":"foshan"
+      }
+    }
+  ],
+
+  "out":{
+    "topic":"t_sensitive_word",
+    "ddl":"",
+    "ddlFile":"D:\\java_\\foshan\\foshan-app\\foshan-app\\t_sensitive_word.sql",
+    "file":"D:\\java_\\foshan\\foshan-app\\foshan-app\\t_sensitive_word_structure_data.sql"
+  }
+  
+}
