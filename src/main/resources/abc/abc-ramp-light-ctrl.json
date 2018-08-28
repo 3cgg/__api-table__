@@ -1,0 +1,40 @@
+{
+
+  "source":{
+    "name":"Code Source",
+    "factory":"scalalg.me.libme.apitable.SimpleExcelSourcerFactory",
+    "file":"D:\\__others__\\集成平台交接\\点数据加工\\匝道控制灯_工控机0828.xlsx",
+    "sheet":"匝道控制灯_工控机0828"
+  },
+
+  "consume":[
+    {
+      "name":"Mapping",
+      "factory":"scalalg.me.libme.apitable.MappingFactory",
+      "mapping":{
+        "DESCRIPTION":"DEVICE_NAM",
+        "桩号":"LOCATION"
+      }
+    },
+    {
+      "name":"Replace Placeholder",
+      "factory":"scalalg.me.libme.apitable.DMLFactory",
+      "topic":"TBL_RAMP_LIGHT_CTRL",
+      "dmlInsert":"INSERT INTO \"ITSOWNER\".\"TBL_RAMP_LIGHT_CTRL\" (\"UID\", \"DEVICE_ID\", \"DEVICE_NAM\", \"LINK_ID\", \"DESCRIPTION\", \"LOCATION\", \"IP_ADDRESS\", \"INSTALL_PHASE\", \"MANU_ID\", \"STATUS\", \"CREATE_DT\", \"CREATE_BY\", \"UPDATE_DT\", \"UPDATE_BY\", \"VERSION\", \"ERROR_CODE\", \"SHAPE\", \"RCV_ERROR_CODE\", \"RCV_ERROR_MSG\", \"NOTIFY_STATE\", \"AVAILABLE\", \"OLD_STATUS\", \"OLD_ERROR_CODE\") VALUES (sys_guid(), '${DEVICE_ID}', '${DEVICE_NAM}', '${LINK_ID}', '${DESCRIPTION}', '${LOCATION}', '${IP_ADDRESS}', '2', NULL, '0', sysdate, '${CREATE_BY}', sysdate, '${UPDATE_BY}', '1', NULL, ${SHAPE}, '0', '正常', '0', '0', '1', NULL);\n",
+      "override":{
+        "uid":"uuid()",
+        "CREATE_BY":"SYS-J",
+        "UPDATE_BY":"SYS-J"
+
+      }
+    }
+  ],
+
+  "out":{
+    "topic":"TBL_RAMP_LIGHT_CTRL",
+    "ddl":"",
+    "ddlFile":"D:\\__others__\\集成平台交接\\点数据加工\\abc.sql",
+    "file":"D:\\__others__\\集成平台交接\\点数据加工\\匝道控制灯_工控机0828.sql"
+  }
+  
+}
