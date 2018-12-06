@@ -1,0 +1,75 @@
+{
+
+  "stream":{
+    "name":"stream-abc-vms-device",
+    "windowCount":100,
+    "windowTime":1000,
+    "schedule":5000,
+    "windowExecutor":1,
+    "executor":3,
+    "paramFactory":"me.libme.xstream.excel.SimpleExcelParamFactory",
+    "properties":{
+      "dskPath":"d:/test-xml-streaming/"
+    }
+  },
+
+  "source":{
+    "name":"新增诱导屏20181205",
+    "factory":"me.libme.xstream.excel.SimpleExcelSourcerFactory",
+    "properties":{
+      "file":"D:\\__others__\\集成平台交接\\点数据加工\\新增诱导屏20181205.xlsx",
+      "sheet":"新增诱导屏20181205"
+    }
+  },
+
+  "operation":[
+    {
+      "name":"Mapping",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.excel.HeadNameMappingFactory",
+      "properties":{
+        "mapping":{
+          "LOCATIOIN":"DEVICE_NAM,LOCATION,DESCRIPTION",
+          "DIRECTION":"ORIENTATION"
+        }
+      }
+    },
+    {
+      "name":"Replace Placeholder",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.excel.fn.sql.DMLFactory",
+      "properties":{
+        "dmlInsert":"INSERT INTO \"ITSOWNER\".\"TBL_VMS_DEVICE\" (\"UID\", \"DEVICE_ID\", \"DEVICE_NAM\", \"DESCRIPTION\", \"DEVICE_TP\", \"LINK_ID\", \"ORIENTATION\", \"IP_ADDRESS\", \"PORT\", \"LOCATION\", \"WIDTH\", \"HEIGHT\", \"PIXELS_X\", \"PIXELS_Y\", \"CTRL_MODE\", \"LIGHT\", \"LIGHT_ADJ\", \"DIS_INTERVAL\", \"START_DT\", \"END_DT\", \"DEFAULT_FONT\", \"DEFAULT_FONT_SIZE\", \"WORD_DIS_TP\", \"WORD_DIS_INTERVAL\", \"POWER_OFF\", \"LIGHT_OFF\", \"MANU_ID\", \"SHAPE\", \"STATUS\", \"CREATE_DT\", \"CREATE_BY\", \"UPDATE_DT\", \"UPDATE_BY\", \"VERSION\", \"ERROR_CODE\", \"TUNNEL\", \"ANGLE_PARAM\", \"INSTALL_PHASE\", \"NOTIFY_STATE\", \"AVAILABLE\", \"OLD_STATUS\", \"OLD_ERROR_CODE\") VALUES ('${UID}', '${DEVICE_ID}', '${DEVICE_NAM}', '${DESCRIPTION}', 'P16', '${LINK_ID}', '${ORIENTATION}', '${IP_ADDRESS}', '${PORT}', '${LOCATION}', '${WIDTH}', '${HEIGHT}', '${PIXELS_X}', '${PIXELS_Y}', NULL, '50', '0', '45', NULL, NULL, NULL, '32', NULL, '10', NULL, NULL, '${MANU_ID}', ${SHAPE}, '0', TO_DATE('2016-10-26 00:00:00', 'SYYYY-MM-DD HH24:MI:SS'), 'system', TO_DATE('2017-02-21 00:00:00', 'SYYYY-MM-DD HH24:MI:SS'), NULL, '11', NULL, NULL, NULL, '4', '0', '0', '0', NULL);\n",
+        "override":{
+          "CREATE_BY":"SYS-J",
+          "UPDATE_BY":"SYS-J",
+          "PORT":7211,
+          "UID":"sequence():20",
+          "MANU_ID":""
+        }
+      }
+
+    },
+    {
+      "name":"Output",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.excel.fn.sql.DMLOutFactory",
+      "properties":{
+        "ddl":"",
+        "ddlFile":"D:\\__others__\\集成平台交接\\点数据加工\\abc.sql",
+        "outFile":"D:\\__others__\\集成平台交接\\点数据加工\\新增诱导屏20181205.sql"
+      }
+
+    },
+
+    {
+      "name":"Logger",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.fn.logger.LoggerFactory",
+      "properties":{
+
+      }
+
+    }
+  ]
+}

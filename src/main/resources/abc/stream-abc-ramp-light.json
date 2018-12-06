@@ -1,0 +1,76 @@
+{
+
+  "stream":{
+    "name":"stream-abc-ramp-light",
+    "windowCount":100,
+    "windowTime":1000,
+    "schedule":5000,
+    "windowExecutor":1,
+    "executor":3,
+    "paramFactory":"me.libme.xstream.excel.SimpleExcelParamFactory",
+    "properties":{
+      "dskPath":"d:/test-xml-streaming/"
+    }
+  },
+
+  "source":{
+    "name":"匝道控制灯20180828",
+    "factory":"me.libme.xstream.excel.SimpleExcelSourcerFactory",
+    "properties":{
+      "file":"D:\\__others__\\集成平台交接\\点数据加工\\匝道控制灯20180828.xlsx",
+      "sheet":"匝道控制灯20180828"
+    }
+  },
+
+  "operation":[
+    {
+      "name":"Mapping",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.excel.HeadNameMappingFactory",
+      "properties":{
+        "mapping":{
+          "DESCRIPTION":"DEVICE_NAM",
+          "桩号":"LOCATION",
+          "DEVICE_CTRL_ID":"DEVICE_CTRL_IP"
+        }
+      }
+    },
+    {
+      "name":"Replace Placeholder",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.excel.fn.sql.DMLFactory",
+      "properties":{
+        "dmlInsert":"INSERT INTO \"ITSOWNER\".\"TBL_RAMP_LIGHT\" (\"UID\", \"DEVICE_ID\", \"DEVICE_NAM\", \"LINK_ID\", \"DEVICE_CTRL_ID\", \"DESCRIPTION\", \"DEVICE_TP\", \"LOCATION\", \"DEVICE_CTRL_IP\", \"INSTALL_PHASE\", \"MANU_ID\", \"CTRL_STATUS\", \"CREATE_DT\", \"CREATE_BY\", \"UPDATE_DT\", \"UPDATE_BY\", \"VERSION\", \"ERROR_CODE\", \"LIGHT_STATUS\", \"SHAPE\", \"ERROR_MSG\", \"RCV_ERROR_CODE\", \"RCV_ERROR_MSG\", \"AVAILABLE\") VALUES (sys_guid(), '${DEVICE_ID}', '${DEVICE_NAM}', '${LINK_ID}', '${DEVICE_CTRL_ID}', '${DESCRIPTION}', '${DEVICE_TP}', '${LOCATION}', '${DEVICE_CTRL_IP}', '2', NULL, '0', sysdate, '${CREATE_BY}', sysdate, '${UPDATE_BY}', '1', NULL, '1', ${SHAPE}, NULL, '0', '正常', '0');\n",
+        "override":{
+          "uid":"uuid()",
+          "DEVICE_TP":"中环匝控灯",
+          "CREATE_BY":"SYS-J",
+          "UPDATE_BY":"SYS-J"
+
+        }
+      }
+
+    },
+    {
+      "name":"Output",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.excel.fn.sql.DMLOutFactory",
+      "properties":{
+        "ddl":"",
+        "ddlFile":"D:\\__others__\\集成平台交接\\点数据加工\\abc.sql",
+        "outFile":"D:\\__others__\\集成平台交接\\点数据加工\\匝道控制灯20180828.sql"
+      }
+
+    },
+
+    {
+      "name":"Logger",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.fn.logger.LoggerFactory",
+      "properties":{
+
+      }
+
+    }
+  ]
+}

@@ -10,14 +10,14 @@ import me.libme.kernel._c.util.{CliParams, JDateUtils, JStringUtils, JUniqueUtil
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConversions
-import scala.io.{Codec, Source}
+import scala.io.Source
 
 /**
   * Created by J on 2018/2/9.
   */
-class Output(conf:collection.mutable.Map[String,AnyRef],taskCount: TaskCount) {
+class E(conf:collection.mutable.Map[String,AnyRef]) {
 
-  val LOGGER:Logger=LoggerFactory.getLogger(classOf[Output])
+  val LOGGER:Logger=LoggerFactory.getLogger(classOf[E])
 
 
   val topic:String=classOf[String].cast(conf.get("topic").get)
@@ -106,7 +106,6 @@ class Output(conf:collection.mutable.Map[String,AnyRef],taskCount: TaskCount) {
     }
 
     LOGGER.info(Thread.currentThread().getName+" ready to exit");
-    taskCount.reduce();
   }
 
 
