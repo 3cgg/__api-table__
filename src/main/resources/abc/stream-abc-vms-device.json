@@ -9,7 +9,13 @@
     "executor":3,
     "paramFactory":"me.libme.xstream.excel.SimpleExcelParamFactory",
     "properties":{
-      "dskPath":"d:/test-xml-streaming/"
+      "dskPath":"d:/test-xml-streaming/",
+      "repo":{
+        "factory":"me.libme.xstream.excel.ExcelRepositoryFactory",
+        "properties":{
+
+        }
+      }
     }
   },
 
@@ -24,13 +30,30 @@
 
   "operation":[
     {
-      "name":"Mapping",
+      "name":"HeadNameMapping",
       "type":"Consumer",
       "factory":"me.libme.xstream.excel.HeadNameMappingFactory",
       "properties":{
         "mapping":{
           "LOCATIOIN":"DEVICE_NAM,LOCATION,DESCRIPTION",
           "DIRECTION":"ORIENTATION"
+        }
+      }
+    },
+    {
+      "name":"Mapping",
+      "type":"Consumer",
+      "factory":"me.libme.xstream.fn.item.MappingFactory",
+      "properties":{
+        "mapping":{
+          "CREATE_BY_$!":"system",
+          "UPDATE_BY_$!":"system",
+          "PORT_$!":7211,
+          "UID_$!":"sequence():23",
+          "MANU_ID_$!":"金晓",
+          "LINK_ID_$!":"dot_before():LINK_ID",
+          "PIXELS_X_$!":0,
+          "PIXELS_Y_$!":0
         }
       }
     },
@@ -45,7 +68,7 @@
           "UPDATE_BY":"system",
           "PORT":7211,
           "UID":"sequence():23",
-          "MANU_ID":"",
+          "MANU_ID":"金晓",
           "LINK_ID":"dot_before():LINK_ID",
           "PIXELS_X":0,
           "PIXELS_Y":0
